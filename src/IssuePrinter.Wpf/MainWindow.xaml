@@ -5,7 +5,9 @@
         mc:Ignorable="d"
 
         x:Class="IssuePrinter.Wpf.MainWindow"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow"
+        Height="450"
+        Width="525">
 
     <StackPanel Margin="20">
         
@@ -22,7 +24,7 @@
             
         </Grid>
 
-        <GroupBox Header="JIRA Settings">
+        <GroupBox Header="JIRA Settings" Padding="20">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
