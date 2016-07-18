@@ -20,7 +20,7 @@
             
             <Label Target="{Binding ElementName=IssueInputBox}">_Issue:</Label>
             <TextBox Grid.Column="1" Name="IssueInputBox">FIN-1266</TextBox>
-            <Button Grid.Column="2" Padding="5,0">PRINT!</Button>
+            <Button Grid.Column="2" Padding="5,0" Click="PrintButton_Click">PRINT!</Button>
             
         </Grid>
 

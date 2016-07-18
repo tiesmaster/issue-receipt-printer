@@ -19,5 +19,9 @@ namespace IssuePrinter.Wpf
             }
             PrinterInputBox.SelectedItem = PrinterInputBox.Items.OfType<string>().Last();
         }
+
+        private void PrintButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        }
     }
 }
