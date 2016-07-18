@@ -1,12 +1,53 @@
-﻿<Window x:Class="IssuePrinter.Wpf.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IssuePrinter.Wpf"
         mc:Ignorable="d"
+
+        x:Class="IssuePrinter.Wpf.MainWindow"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+
+    <StackPanel Margin="20">
         
-    </Grid>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <Label Target="{Binding ElementName=IssueInputBox}">_Issue:</Label>
+            <TextBox Grid.Column="1" Name="IssueInputBox">FIN-1266</TextBox>
+            <Button Grid.Column="2" Padding="5,0">PRINT!</Button>
+            
+        </Grid>
+
+        <GroupBox Header="JIRA Settings">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=HostInputBox}">_Host:</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" Name="HostInputBox">https://jira.coolblue.eu/jira</TextBox>
+
+                <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=UsernameInputBox}">_Username:</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" Name="UsernameInputBox">t.brobbel</TextBox>
+
+                <Label Grid.Row="2" Grid.Column="0" Target="{Binding ElementName=PasswordInputBox}">_Password:</Label>
+                <PasswordBox Grid.Row="2" Grid.Column="1" Name="PasswordInputBox" />
+                
+            </Grid>
+        </GroupBox>
+
+        <ListBox Name="PrinterInputBox" />
+
+    </StackPanel>
+
 </Window>
