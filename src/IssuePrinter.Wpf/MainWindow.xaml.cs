@@ -10,7 +10,17 @@ namespace IssuePrinter.Wpf
         public MainWindow()
         {
             InitializeComponent();
+            ConfigureJiraSettings();
             ConfigurePrinterInputBox();
+        }
+
+        private void ConfigureJiraSettings()
+        {
+            HostInputBox.Text = "https://jira.coolblue.eu/jira";
+            UsernameInputBox.Text = "t.brobbel";
+            PasswordInputBox.Password = "";
+
+            IssueInputBox.Text = "FIN-1300";
         }
 
         private void ConfigurePrinterInputBox()

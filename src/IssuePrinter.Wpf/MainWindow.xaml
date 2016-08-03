@@ -19,7 +19,7 @@
             </Grid.ColumnDefinitions>
             
             <Label Target="{Binding ElementName=IssueInputBox}">_Issue:</Label>
-            <TextBox Grid.Column="1" Name="IssueInputBox">FIN-1266</TextBox>
+            <TextBox Grid.Column="1" Name="IssueInputBox" />
             <Button Grid.Column="2" Padding="5,0" Click="PrintButton_Click">PRINT!</Button>
             
         </Grid>
@@ -37,10 +37,10 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=HostInputBox}">_Host:</Label>
-                <TextBox Grid.Row="0" Grid.Column="1" Name="HostInputBox">https://jira.coolblue.eu/jira</TextBox>
+                <TextBox Grid.Row="0" Grid.Column="1" Name="HostInputBox" />
 
                 <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=UsernameInputBox}">_Username:</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Name="UsernameInputBox">t.brobbel</TextBox>
+                <TextBox Grid.Row="1" Grid.Column="1" Name="UsernameInputBox" />
 
                 <Label Grid.Row="2" Grid.Column="0" Target="{Binding ElementName=PasswordInputBox}">_Password:</Label>
                 <PasswordBox Grid.Row="2" Grid.Column="1" Name="PasswordInputBox" />
