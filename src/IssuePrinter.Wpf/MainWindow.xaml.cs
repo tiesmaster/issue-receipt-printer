@@ -1,4 +1,5 @@
-﻿using System.Drawing.Printing;
+﻿using System.Configuration;
+using System.Drawing.Printing;
 using System.Linq;
 
 using IssuePrinter.Core;
@@ -16,11 +17,11 @@ namespace IssuePrinter.Wpf
 
         private void ConfigureJiraSettings()
         {
-            HostInputBox.Text = "https://jira.coolblue.eu/jira";
-            UsernameInputBox.Text = "t.brobbel";
-            PasswordInputBox.Password = "";
+            HostInputBox.Text = ConfigurationManager.AppSettings["JiraHost"];
+            UsernameInputBox.Text = ConfigurationManager.AppSettings["JiraUsername"];
+            PasswordInputBox.Password = ConfigurationManager.AppSettings["JiraPassword"];
 
-            IssueInputBox.Text = "FIN-1300";
+            IssueInputBox.Text = ConfigurationManager.AppSettings["JiraDefaultIssueNumber"];
         }
 
         private void ConfigurePrinterInputBox()
