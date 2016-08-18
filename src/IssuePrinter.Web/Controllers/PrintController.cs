@@ -21,14 +21,14 @@ namespace IssuePrinter.Web.Controllers
             _printService = new PrintService(ticketPrintServiceConfig);
         }        
 
-        // GET: /Print/Issue/MF-800
+        // GET: /Print/Issue?key=MF-800
         public ActionResult Issue(string key)
         {          
             _printService.PrintIssue(key);
             return null;   
         }
 
-        // GET: /Print/Sprint/488
+        // GET: /Print/Sprint?key=488
         public ActionResult Sprint(string key)
         {
             _printService.PrintSprintIssues(key);
