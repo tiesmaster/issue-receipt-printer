@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Windows;
 
 using IssuePrinter.Core;
 
@@ -33,18 +34,30 @@ namespace IssuePrinter.Wpf
             PrinterInputBox.SelectedItem = PrinterInputBox.Items.OfType<string>().Last();
         }
 
-        private void PrintButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void PrintIssueButton_Click(object sender, RoutedEventArgs e)
         {
-            var ticketPrintServiceConfig = new TicketPrintServiceConfig
-            {
-                JiraHost = HostInputBox.Text,
-                JiraUsername = UsernameInputBox.Text,
-                JiraPassword = PasswordInputBox.Password,
-                PrinterName = (string)PrinterInputBox.SelectedItem,
-            };
-
-            var printService = new PrintService(ticketPrintServiceConfig);
+            var printService = CreatePrintService();
             printService.PrintIssue(IssueInputBox.Text);
+        }
+
+        private void PrintSprintButton_Click(object sender, RoutedEventArgs e)
+        {
+            var printService = CreatePrintService();
+            printService.PrintSprintIssues(SprintInputBox.Text);
+        }
+
+        private PrintService CreatePrintService()
+        {
+            var ticketPrintServiceConfig =
+                new TicketPrintServiceConfig
+                {
+                    JiraHost = HostInputBox.Text,
+                    JiraUsername = UsernameInputBox.Text,
+                    JiraPassword = PasswordInputBox.Password,
+                    PrinterName = (string)PrinterInputBox.SelectedItem
+                };
+
+            return new PrintService(ticketPrintServiceConfig);
         }
     }
 }

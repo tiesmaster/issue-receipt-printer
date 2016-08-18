@@ -12,6 +12,10 @@
     <StackPanel Margin="20">
         
         <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
@@ -19,9 +23,13 @@
             </Grid.ColumnDefinitions>
             
             <Label Target="{Binding ElementName=IssueInputBox}">_Issue:</Label>
-            <TextBox Grid.Column="1" Name="IssueInputBox" />
-            <Button Grid.Column="2" Padding="5,0" Click="PrintButton_Click">PRINT!</Button>
-            
+            <TextBox Grid.Row="0" Grid.Column="1" Name="IssueInputBox" />
+            <Button Grid.Row="0" Grid.Column="2" Padding="5,0" Click="PrintIssueButton_Click">_PRINT ISSUE!</Button>
+
+            <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=SprintInputBox}">_Sprint:</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="SprintInputBox" />
+            <Button Grid.Row="1" Grid.Column="2" Padding="5,0" Click="PrintSprintButton_Click">PRINT SPRINT!</Button>
+
         </Grid>
 
         <GroupBox Header="JIRA Settings" Padding="20">
