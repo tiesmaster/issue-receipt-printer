@@ -23,7 +23,7 @@ namespace IssuePrinter.Core
             _jiraClient = Jira.CreateRestClient(host, username, password);
             _jiraClient.Debug = true;
             _jiraClient.MaxIssuesPerRequest = 100;            
-            _issueTypes = _jiraClient.GetIssueTypes().ToList();
+            //_issueTypes = _jiraClient.GetIssueTypes().ToList();
         }
 
 
