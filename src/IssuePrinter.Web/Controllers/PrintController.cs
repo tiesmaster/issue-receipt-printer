@@ -1,10 +1,11 @@
 ﻿using System.Configuration;
-using System.Web.Mvc;
+using System.Web.Http;
+
 using IssuePrinter.Core;
 
 namespace IssuePrinter.Web.Controllers
 {
-    public class PrintController : Controller
+    public class PrintController : ApiController
     {
         private readonly PrintService _printService;
 
@@ -19,20 +20,20 @@ namespace IssuePrinter.Web.Controllers
             };
 
             _printService = new PrintService(ticketPrintServiceConfig);
-        }        
+        }
 
         // GET: /Print/Issue/MF-800
-        public ActionResult Issue(string key)
-        {          
+        public IHttpActionResult Issue(string key)
+        {
             _printService.PrintIssue(key);
-            return null;   
+            return Ok();
         }
 
         // GET: /Print/Sprint/488
-        public ActionResult Sprint(string key)
+        public IHttpActionResult Sprint(string key)
         {
             _printService.PrintSprintIssues(key);
-            return null;
+            return Ok();
         }
-   }
+    }
 }
