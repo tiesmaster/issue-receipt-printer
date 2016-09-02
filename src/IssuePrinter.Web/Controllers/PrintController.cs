@@ -23,6 +23,7 @@ namespace IssuePrinter.Web.Controllers
         }
 
         // GET: /Print/Issue/MF-800
+        [HttpGet]
         public IHttpActionResult Issue(string key)
         {
             _printService.PrintIssue(key);
@@ -30,6 +31,7 @@ namespace IssuePrinter.Web.Controllers
         }
 
         // GET: /Print/Sprint/488
+        [HttpGet]
         public IHttpActionResult Sprint(string key)
         {
             _printService.PrintSprintIssues(key);
