@@ -1,6 +1,8 @@
 ﻿using System.Web.Http;
 using System.Web.Http.Dispatcher;
 
+using IssuePrinter.Web.Test;
+
 namespace IssuePrinter.Web
 {
     public static class WebApiConfig
@@ -14,7 +16,7 @@ namespace IssuePrinter.Web
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Services.Replace(typeof(IHttpControllerActivator), new PrintControllerBootstrapper());
+            config.Services.Replace(typeof(IHttpControllerActivator), new PrintControllerTestBootstrapper());
         }
     }
 }
