@@ -20,16 +20,18 @@ namespace IssuePrinter.Web
                     nameof(controllerType));
             }
 
-            var ticketPrintServiceConfig = new TicketPrintServiceConfig
+            return new PrintController(new PrintService(CreatePrintServiceConfig()));
+        }
+
+        private static TicketPrintServiceConfig CreatePrintServiceConfig()
+        {
+            return new TicketPrintServiceConfig
             {
                 JiraHost = ConfigurationManager.AppSettings["JiraHost"],
                 JiraUsername = ConfigurationManager.AppSettings["JiraUsername"],
                 JiraPassword = ConfigurationManager.AppSettings["JiraPassword"],
                 PrinterName = ConfigurationManager.AppSettings["PrinterName"],
             };
-
-            var printService = new PrintService(ticketPrintServiceConfig);
-            return new PrintController(printService);
         }
     }
 }
