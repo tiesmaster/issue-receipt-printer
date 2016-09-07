@@ -28,14 +28,22 @@ namespace IssuePrinter.Web
         {
             var config = CreatePrintServiceConfig();
 
-            var jiraRestClient = Jira.CreateRestClient(config.JiraHost, config.JiraUsername, config.JiraPassword);
-            jiraRestClient.Debug = true;
-            jiraRestClient.MaxIssuesPerRequest = 100;
+            var jiraRestClient = CreateJiraRestClient(config);
 
             var client = new JiraClient(jiraRestClient);
             var issuePrinter = new WindowsIssuePrinter(config.PrinterName);
 
             return new PrintController(new PrintService(client, issuePrinter));
+        }
+
+        private static Jira CreateJiraRestClient(TicketPrintServiceConfig config)
+        {
+            var jiraRestClient = Jira.CreateRestClient(config.JiraHost, config.JiraUsername, config.JiraPassword);
+
+            jiraRestClient.Debug = true;
+            jiraRestClient.MaxIssuesPerRequest = 100;
+
+            return jiraRestClient;
         }
 
         private static TicketPrintServiceConfig CreatePrintServiceConfig()
