@@ -26,34 +26,36 @@ namespace IssuePrinter.Core
         public void PrintIssue(IssueCard issue)
         {
             if (issue == null) return;
-
-            var printDocument = NewPrinterDocument(_printerName);
-            printDocument.PrintPage += (_, e) =>
-            {
-                var printer = new GraphicsIssuePrinter(issue, e.Graphics);
-                printer.PrintIssue();
-                e.HasMorePages = false;
-            };
-            printDocument.Print();
+            PrintIssues(new[] { issue });
         }
 
         public void PrintIssues(IEnumerable<IssueCard> issues)
         {
             if (issues == null) return;
 
-            var printDocument = NewPrinterDocument(_printerName);
             var pendingIssues = new Queue<IssueCard>(issues);
+            var printDocument = NewPrinterDocument(_printerName);
+            PrintQueuedIssuesToDocument(pendingIssues, printDocument);
+        }
+
+        private static void PrintQueuedIssuesToDocument(Queue<IssueCard> pendingIssues, PrintDocument printDocument)
+        {
             printDocument.PrintPage += (_, e) =>
             {
                 if (pendingIssues.Count > 0)
                 {
                     var issue = pendingIssues.Dequeue();
-                    var printer = new GraphicsIssuePrinter(issue, e.Graphics);
-                    printer.PrintIssue();
+                    PrintIssueToGraphics(issue, e.Graphics);
                 }
                 e.HasMorePages = pendingIssues.Count > 0;
             };
             printDocument.Print();
+        }
+
+        private static void PrintIssueToGraphics(IssueCard issue, Graphics outputDevice)
+        {
+            var printer = new GraphicsIssuePrinter(issue, outputDevice);
+            printer.PrintIssue();
         }
 
         private static PrintDocument NewPrinterDocument(string printerName)
