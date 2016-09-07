@@ -20,7 +20,17 @@ namespace IssuePrinter.Web
                     nameof(controllerType));
             }
 
-            return new PrintController(new PrintService(CreatePrintServiceConfig()));
+            return CreatePrintController();
+        }
+
+        private static IHttpController CreatePrintController()
+        {
+            var config = CreatePrintServiceConfig();
+
+            var client = new JiraClient(config.JiraHost, config.JiraUsername, config.JiraPassword);
+            var issuePrinter = new WindowsIssuePrinter(config.PrinterName);
+
+            return new PrintController(new PrintService(client, issuePrinter));
         }
 
         private static TicketPrintServiceConfig CreatePrintServiceConfig()

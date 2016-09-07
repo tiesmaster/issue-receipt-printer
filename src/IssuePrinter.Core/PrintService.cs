@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
+
 using IssuePrinter.Core.Models;
 
 namespace IssuePrinter.Core
 {
     public class PrintService
     {
-
         private readonly IProjectManagementServiceClient _projectManagementServiceClient;
         private readonly IIssuePrinter _issuePrinter;
 
-        public PrintService(TicketPrintServiceConfig ticketPrintServiceConfig)
+        public PrintService(IProjectManagementServiceClient client, IIssuePrinter printer)
         {
-            _projectManagementServiceClient = new JiraClient(ticketPrintServiceConfig.JiraHost, ticketPrintServiceConfig.JiraUsername, ticketPrintServiceConfig.JiraPassword);
-            _issuePrinter = new WindowsIssuePrinter(ticketPrintServiceConfig.PrinterName);
+            _projectManagementServiceClient = client;
+            _issuePrinter = printer;
         }
 
         public void PrintIssue(string key)
         {
-
             var issue = _projectManagementServiceClient.GetIssue(key);
 
             if (issue != null)
@@ -29,14 +28,12 @@ namespace IssuePrinter.Core
         public void PrintSprintIssues(string sprintKey)
         {
             var issues = _projectManagementServiceClient.GetIssuesForSprint(sprintKey);
-
             PrintIssues(issues);
         }
 
         public void PrintJqlIssues(string jql)
         {
             var issues = _projectManagementServiceClient.GetIssuesFromQueryLanguage(jql);
-
             PrintIssues(issues);
         }
 

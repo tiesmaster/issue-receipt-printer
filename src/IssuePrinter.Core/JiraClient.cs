@@ -26,10 +26,8 @@ namespace IssuePrinter.Core
             _issueTypes = _jiraClient.GetIssueTypes().ToList();
         }
 
-
         public IssueCard GetIssue(string key)
         {
-
             try
             {
                 var jiraIssue = (from i in _jiraClient.Issues
@@ -45,7 +43,6 @@ namespace IssuePrinter.Core
                 Console.Write(e);
             }
             
-
             return null;
         }
         
