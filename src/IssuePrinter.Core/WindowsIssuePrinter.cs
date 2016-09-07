@@ -26,6 +26,26 @@ namespace IssuePrinter.Core
             _pendingIssues = new Queue<IssueCard>();
         }
 
+        public void PrintIssue(IssueCard issueCard)
+        {
+            if (issueCard == null) return;
+
+            _pendingIssues.Enqueue(issueCard);
+            _printDocument.Print();
+        }
+
+        public void PrintIssues(IEnumerable<IssueCard> issues)
+        {
+            if (issues == null) return;
+
+            foreach (var issue in issues)
+            {
+                _pendingIssues.Enqueue(issue);
+            }
+
+            _printDocument.Print();
+        }
+
         private static PrintDocument NewPrinterDocument(string printerName)
         {
             var pd = new PrintDocument
@@ -57,7 +77,6 @@ namespace IssuePrinter.Core
                 PrintRank(ev, issue);
                 PrintStoryPoints(ev, issue);
                 PrintType(ev, issue);
-
             }
 
             ev.HasMorePages = _pendingIssues.Count > 0;    
@@ -132,26 +151,6 @@ namespace IssuePrinter.Core
         {
             var titleFont = new Font(FontFamily.GenericSansSerif, 12);
             ev.Graphics.DrawString(issue.Type, titleFont, Brushes.Black, 175, 250);
-        }
-
-        public void PrintIssue(IssueCard issueCard)
-        {
-            if (issueCard == null) return;
-
-            _pendingIssues.Enqueue(issueCard);
-            _printDocument.Print();
-        }
-
-        public void PrintIssues(IEnumerable<IssueCard> issues)
-        {
-            if (issues == null) return;
-
-            foreach (var issue in issues)
-            {
-                _pendingIssues.Enqueue(issue);    
-            }
-            
-            _printDocument.Print();
         }
     }
 }
