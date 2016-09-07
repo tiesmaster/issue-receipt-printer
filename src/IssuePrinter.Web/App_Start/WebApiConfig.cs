@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using System.Web.Http.Dispatcher;
 
 namespace IssuePrinter.Web
 {
@@ -12,6 +13,8 @@ namespace IssuePrinter.Web
                 routeTemplate: "{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Services.Replace(typeof(IHttpControllerActivator), new PrintControllerBootstrapper());
         }
     }
 }
