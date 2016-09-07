@@ -21,7 +21,7 @@ namespace IssuePrinter.Core
         public WindowsIssuePrinter(string printerName)
         {
             _printDocument = NewPrinterDocument(printerName);
-            _printDocument.PrintPage += IssueFormatter;
+            _printDocument.PrintPage += HandleNextPage;
             _pendingIssues = new Queue<IssueCard>();
         }
 
@@ -63,22 +63,26 @@ namespace IssuePrinter.Core
             return pd;
         }
 
-        private void IssueFormatter(object sender, PrintPageEventArgs ev)
+        private void HandleNextPage(object sender, PrintPageEventArgs ev)
         {
             if (_pendingIssues.Count > 0)
             {
                 var issue = _pendingIssues.Dequeue();
-
-                PrintKey(ev, issue);
-                PrintSeparator(ev, 70, 400);
-                PrintSummary(ev, issue);
-                PrintPriority(ev, issue);
-                PrintRank(ev, issue);
-                PrintStoryPoints(ev, issue);
-                PrintType(ev, issue);
+                PrintIssue(ev, issue);
             }
 
             ev.HasMorePages = _pendingIssues.Count > 0;    
+        }
+
+        private static void PrintIssue(PrintPageEventArgs ev, IssueCard issue)
+        {
+            PrintKey(ev, issue);
+            PrintSeparator(ev, 70, 400);
+            PrintSummary(ev, issue);
+            PrintPriority(ev, issue);
+            PrintRank(ev, issue);
+            PrintStoryPoints(ev, issue);
+            PrintType(ev, issue);
         }
 
         private static void PrintKey(PrintPageEventArgs ev, IssueCard issueCard)
