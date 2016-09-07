@@ -68,89 +68,102 @@ namespace IssuePrinter.Core
             if (_pendingIssues.Count > 0)
             {
                 var issue = _pendingIssues.Dequeue();
-                PrintIssue(ev.Graphics, issue);
+                var printer = new GraphicsIssuePrinter(issue, ev.Graphics);
+                printer.PrintIssue();
             }
 
             ev.HasMorePages = _pendingIssues.Count > 0;    
         }
 
-        private static void PrintIssue(Graphics outputDevice, IssueCard issue)
+        private class GraphicsIssuePrinter
         {
-            PrintKey(outputDevice, issue);
-            PrintSeparator(outputDevice, 70, 400);
-            PrintSummary(outputDevice, issue);
-            PrintPriority(outputDevice, issue);
-            PrintRank(outputDevice, issue);
-            PrintStoryPoints(outputDevice, issue);
-            PrintType(outputDevice, issue);
-        }
+            private readonly IssueCard _issue;
+            private readonly Graphics _outputDevice;
 
-        private static void PrintKey(Graphics outputDevice, IssueCard issueCard)
-        {
-            var titleFont = new Font(FontFamily.GenericSansSerif, 36);
-            outputDevice.DrawString(issueCard.Key, titleFont, Brushes.Black, 0, 10);      
-        }
-
-        private static void PrintSeparator(Graphics outputDevice, int yOffset, int lenght)
-        {
-            var boldBlackPen = new Pen(Color.Black, 3);
-
-            outputDevice.DrawLine(boldBlackPen, 0, yOffset, lenght, yOffset);
-        }
-
-        private static void PrintSummary(Graphics outputDevice, IssueCard issueCard)
-        {
-            var summaryFont = new Font(FontFamily.GenericSansSerif, 16);
-            var lineHeight = summaryFont.GetHeight(outputDevice);
-            float offsetY = 80;
-
-            var wrappedSummary = issueCard.GetSummaryWrapped(35);
-            foreach (var line in wrappedSummary)
+            public GraphicsIssuePrinter(IssueCard issue, Graphics outputDevice)
             {
-                outputDevice.DrawString(line, summaryFont, Brushes.Black, 0, offsetY);
-                offsetY += lineHeight;
-            }            
-        }
-        
-        private static void PrintPriority(Graphics outputDevice, IssueCard issue)
-        {
-            var priorityIcon = PriorityToImage(issue.Priority);
-            outputDevice.DrawImage(priorityIcon,350,20);
-        }
-
-        private static Image PriorityToImage(Priority priority)
-        {
-            switch (priority)
-            {
-                case Priority.Minor:
-                    return Icons.minor;
-                case Priority.Major:
-                    return Icons.major;
-                case Priority.Critical:
-                    return Icons.critical;
-                case Priority.Blocker:
-                    return Icons.blocker;
-                default:
-                    throw new ArgumentException();            
+                _issue = issue;
+                _outputDevice = outputDevice;
             }
-        }
 
-        private static void PrintRank(Graphics outputDevice, IssueCard issue)
-        {
-            var font = new Font(FontFamily.GenericSansSerif, 12);
-            outputDevice.DrawString("#"+issue.Rank, font, Brushes.Black, 0, 250);  
-        }
+            internal void PrintIssue()
+            {
+                PrintKey();
+                PrintSeparator(70, 400);
+                PrintSummary();
+                PrintPriority();
+                PrintRank();
+                PrintStoryPoints();
+                PrintType();
+            }
 
-        private static void PrintStoryPoints(Graphics outputDevice, IssueCard issue)
-        {
-            var titleFont = new Font(FontFamily.GenericSansSerif, 12);
-            outputDevice.DrawString("SP " + issue.StoryPoints, titleFont, Brushes.Black, 350, 250);
-        }
+            private void PrintKey()
+            {
+                var titleFont = new Font(FontFamily.GenericSansSerif, 36);
+                _outputDevice.DrawString(_issue.Key, titleFont, Brushes.Black, 0, 10);
+            }
 
-        private static void PrintType(Graphics outputDevice, IssueCard issue)
-        {
-            var titleFont = new Font(FontFamily.GenericSansSerif, 12);
-            outputDevice.DrawString(issue.Type, titleFont, Brushes.Black, 175, 250);
+            private void PrintSeparator(int yOffset, int lenght)
+            {
+                var boldBlackPen = new Pen(Color.Black, 3);
+
+                _outputDevice.DrawLine(boldBlackPen, 0, yOffset, lenght, yOffset);
+            }
+
+            private void PrintSummary()
+            {
+                var summaryFont = new Font(FontFamily.GenericSansSerif, 16);
+                var lineHeight = summaryFont.GetHeight(_outputDevice);
+                float offsetY = 80;
+
+                var wrappedSummary = _issue.GetSummaryWrapped(35);
+                foreach (var line in wrappedSummary)
+                {
+                    _outputDevice.DrawString(line, summaryFont, Brushes.Black, 0, offsetY);
+                    offsetY += lineHeight;
+                }
+            }
+
+            private void PrintPriority()
+            {
+                var priorityIcon = PriorityToImage(_issue.Priority);
+                _outputDevice.DrawImage(priorityIcon, 350, 20);
+            }
+
+            private Image PriorityToImage(Priority priority)
+            {
+                switch (priority)
+                {
+                    case Priority.Minor:
+                        return Icons.minor;
+                    case Priority.Major:
+                        return Icons.major;
+                    case Priority.Critical:
+                        return Icons.critical;
+                    case Priority.Blocker:
+                        return Icons.blocker;
+                    default:
+                        throw new ArgumentException();
+                }
+            }
+
+            private void PrintRank()
+            {
+                var font = new Font(FontFamily.GenericSansSerif, 12);
+                _outputDevice.DrawString("#" + _issue.Rank, font, Brushes.Black, 0, 250);
+            }
+
+            private void PrintStoryPoints()
+            {
+                var titleFont = new Font(FontFamily.GenericSansSerif, 12);
+                _outputDevice.DrawString("SP " + _issue.StoryPoints, titleFont, Brushes.Black, 350, 250);
+            }
+
+            private void PrintType()
+            {
+                var titleFont = new Font(FontFamily.GenericSansSerif, 12);
+                _outputDevice.DrawString(_issue.Type, titleFont, Brushes.Black, 175, 250);
+            }
         }
     }
 }
