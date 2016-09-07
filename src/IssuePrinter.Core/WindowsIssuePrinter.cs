@@ -16,34 +16,44 @@ namespace IssuePrinter.Core
 
     public class WindowsIssuePrinter : IIssuePrinter
     {
-        private readonly PrintDocument _printDocument;
-        private readonly Queue<IssueCard> _pendingIssues;
+        private readonly string _printerName;
 
         public WindowsIssuePrinter(string printerName)
         {
-            _printDocument = NewPrinterDocument(printerName);
-            _printDocument.PrintPage += HandleNextPage;
-            _pendingIssues = new Queue<IssueCard>();
+            _printerName = printerName;
         }
 
         public void PrintIssue(IssueCard issue)
         {
             if (issue == null) return;
 
-            _pendingIssues.Enqueue(issue);
-            _printDocument.Print();
+            var printDocument = NewPrinterDocument(_printerName);
+            printDocument.PrintPage += (_, e) =>
+            {
+                var printer = new GraphicsIssuePrinter(issue, e.Graphics);
+                printer.PrintIssue();
+                e.HasMorePages = false;
+            };
+            printDocument.Print();
         }
 
         public void PrintIssues(IEnumerable<IssueCard> issues)
         {
             if (issues == null) return;
 
-            foreach (var issue in issues)
+            var printDocument = NewPrinterDocument(_printerName);
+            var pendingIssues = new Queue<IssueCard>(issues);
+            printDocument.PrintPage += (_, e) =>
             {
-                _pendingIssues.Enqueue(issue);
-            }
-
-            _printDocument.Print();
+                if (pendingIssues.Count > 0)
+                {
+                    var issue = pendingIssues.Dequeue();
+                    var printer = new GraphicsIssuePrinter(issue, e.Graphics);
+                    printer.PrintIssue();
+                }
+                e.HasMorePages = pendingIssues.Count > 0;
+            };
+            printDocument.Print();
         }
 
         private static PrintDocument NewPrinterDocument(string printerName)
@@ -62,18 +72,6 @@ namespace IssuePrinter.Core
             };
 
             return pd;
-        }
-
-        private void HandleNextPage(object sender, PrintPageEventArgs ev)
-        {
-            if (_pendingIssues.Count > 0)
-            {
-                var issue = _pendingIssues.Dequeue();
-                var printer = new GraphicsIssuePrinter(issue, ev.Graphics);
-                printer.PrintIssue();
-            }
-
-            ev.HasMorePages = _pendingIssues.Count > 0;    
         }
 
         private class GraphicsIssuePrinter
