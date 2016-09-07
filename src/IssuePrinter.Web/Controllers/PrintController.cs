@@ -30,7 +30,7 @@ namespace IssuePrinter.Web.Controllers
             return Ok();
         }
 
-        // GET: /Print/Sprint/?key=488
+        // GET: /Print/Sprint?key=488
         [HttpGet]
         public IHttpActionResult Sprint(string key)
         {
