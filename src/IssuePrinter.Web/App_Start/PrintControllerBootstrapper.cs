@@ -1,8 +1,11 @@
-﻿using IssuePrinter.Web.Controllers;
-using System;
+﻿using System;
+using System.Configuration;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
+
+using IssuePrinter.Core;
+using IssuePrinter.Web.Controllers;
 
 namespace IssuePrinter.Web
 {
@@ -17,7 +20,16 @@ namespace IssuePrinter.Web
                     nameof(controllerType));
             }
 
-            return new PrintController();
+            var ticketPrintServiceConfig = new TicketPrintServiceConfig
+            {
+                JiraHost = ConfigurationManager.AppSettings["JiraHost"],
+                JiraUsername = ConfigurationManager.AppSettings["JiraUsername"],
+                JiraPassword = ConfigurationManager.AppSettings["JiraPassword"],
+                PrinterName = ConfigurationManager.AppSettings["PrinterName"],
+            };
+
+            var printService = new PrintService(ticketPrintServiceConfig);
+            return new PrintController(printService);
         }
     }
 }

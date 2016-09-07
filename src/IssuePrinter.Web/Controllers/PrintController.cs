@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 using IssuePrinter.Core;
 
@@ -9,17 +8,9 @@ namespace IssuePrinter.Web.Controllers
     {
         private readonly PrintService _printService;
 
-        public PrintController()
+        public PrintController(PrintService printService)
         {
-            var ticketPrintServiceConfig = new TicketPrintServiceConfig
-            {
-                JiraHost = ConfigurationManager.AppSettings["JiraHost"],
-                JiraUsername = ConfigurationManager.AppSettings["JiraUsername"],
-                JiraPassword = ConfigurationManager.AppSettings["JiraPassword"],
-                PrinterName = ConfigurationManager.AppSettings["PrinterName"],
-            };
-
-            _printService = new PrintService(ticketPrintServiceConfig);
+            _printService = printService;
         }
 
         // GET: /Print/Issue?key=FIN-1360
