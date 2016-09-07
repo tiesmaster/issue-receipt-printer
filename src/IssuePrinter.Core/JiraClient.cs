@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Atlassian.Jira;
+
 using IssuePrinter.Core.Models;
 
 namespace IssuePrinter.Core
@@ -15,22 +17,20 @@ namespace IssuePrinter.Core
     
     public class JiraClient : IProjectManagementServiceClient
     {
-        private readonly Jira _jiraClient;
-        private readonly List<IssueType> _issueTypes ;
+        private readonly Jira _jiraRestClient;
+        private readonly List<IssueType> _issueTypes;
         
-        public JiraClient(string host, string username, string password)
+        public JiraClient(Jira jiraRestClient)
         {
-            _jiraClient = Jira.CreateRestClient(host, username, password);
-            _jiraClient.Debug = true;
-            _jiraClient.MaxIssuesPerRequest = 100;            
-            _issueTypes = _jiraClient.GetIssueTypes().ToList();
+            _jiraRestClient = jiraRestClient;
+            _issueTypes = _jiraRestClient.GetIssueTypes().ToList();
         }
 
         public IssueCard GetIssue(string key)
         {
             try
             {
-                var jiraIssue = (from i in _jiraClient.Issues
+                var jiraIssue = (from i in _jiraRestClient.Issues
                                  where i.Key == key
                                  select i).FirstOrDefault();
                 if (jiraIssue != null)
@@ -54,7 +54,7 @@ namespace IssuePrinter.Core
 
         public IEnumerable<IssueCard> GetIssuesFromQueryLanguage(string jql)
         {
-            var issues = _jiraClient.GetIssuesFromJql(jql);
+            var issues = _jiraRestClient.GetIssuesFromJql(jql);
 
             var rank = 1;
             return issues.Select(sprintIssue => MapIssueToIssueCard(sprintIssue, rank++)).ToList();
@@ -72,7 +72,6 @@ namespace IssuePrinter.Core
                 StoryPoints = storyPoints,
                 Type = GetIssueType(issue),
                 Rank = rank.ToString()
-
             };
         }
 
@@ -88,11 +87,10 @@ namespace IssuePrinter.Core
                 {
                     storyPoints = storyPointsValue.ToString();
                 }
-                
             }
             catch (Exception e)
             {
-                
+                // TODO: handle this
             }
 
             return storyPoints;

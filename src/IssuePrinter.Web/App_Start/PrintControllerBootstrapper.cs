@@ -6,6 +6,7 @@ using System.Web.Http.Dispatcher;
 
 using IssuePrinter.Core;
 using IssuePrinter.Web.Controllers;
+using Atlassian.Jira;
 
 namespace IssuePrinter.Web
 {
@@ -27,7 +28,11 @@ namespace IssuePrinter.Web
         {
             var config = CreatePrintServiceConfig();
 
-            var client = new JiraClient(config.JiraHost, config.JiraUsername, config.JiraPassword);
+            var jiraRestClient = Jira.CreateRestClient(config.JiraHost, config.JiraUsername, config.JiraPassword);
+            jiraRestClient.Debug = true;
+            jiraRestClient.MaxIssuesPerRequest = 100;
+
+            var client = new JiraClient(jiraRestClient);
             var issuePrinter = new WindowsIssuePrinter(config.PrinterName);
 
             return new PrintController(new PrintService(client, issuePrinter));
