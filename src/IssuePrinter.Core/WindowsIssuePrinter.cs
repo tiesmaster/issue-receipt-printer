@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
+
 using IssuePrinter.Core.Models;
 using IssuePrinter.Core.Resources;
 
@@ -9,7 +10,7 @@ namespace IssuePrinter.Core
 {
     public interface IIssuePrinter
     {
-        void PrintIssue(IssueCard issueCard);
+        void PrintIssue(IssueCard issue);
         void PrintIssues(IEnumerable<IssueCard> issues);
     }
 
@@ -25,11 +26,11 @@ namespace IssuePrinter.Core
             _pendingIssues = new Queue<IssueCard>();
         }
 
-        public void PrintIssue(IssueCard issueCard)
+        public void PrintIssue(IssueCard issue)
         {
-            if (issueCard == null) return;
+            if (issue == null) return;
 
-            _pendingIssues.Enqueue(issueCard);
+            _pendingIssues.Enqueue(issue);
             _printDocument.Print();
         }
 
