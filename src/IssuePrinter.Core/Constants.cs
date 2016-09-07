@@ -4,6 +4,5 @@
     {
         public const string CfLabelStoryPoints = "Story Points";
         public const string EmptyStoryPoints = "-";
-
     }
 }

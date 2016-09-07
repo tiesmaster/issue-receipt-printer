@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
-using IssuePrinter.Core.Helpers;
 using IssuePrinter.Core.Models;
 using IssuePrinter.Core.Resources;
 
@@ -98,12 +97,10 @@ namespace IssuePrinter.Core
         private static void PrintSummary(PrintPageEventArgs ev, IssueCard issueCard)
         {
             var summaryFont = new Font(FontFamily.GenericSansSerif, 16);
-
-            var wrappedSummary = IssueFormattingHelper.Wrap(issueCard.Summary, 35);
             var lineHeight = summaryFont.GetHeight(ev.Graphics);
-
             float offsetY = 80;
 
+            var wrappedSummary = issueCard.GetSummaryWrapped(35);
             foreach (var line in wrappedSummary)
             {
                 ev.Graphics.DrawString(line, summaryFont, Brushes.Black, 0, offsetY);
@@ -114,7 +111,6 @@ namespace IssuePrinter.Core
         private static void PrintPriority(PrintPageEventArgs ev, IssueCard issue)
         {
             var priorityIcon = PriorityToImage(issue.Priority);
-
             ev.Graphics.DrawImage(priorityIcon,350,20);
         }
 
