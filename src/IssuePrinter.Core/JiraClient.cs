@@ -18,15 +18,15 @@ namespace IssuePrinter.Core
     public class JiraClient : IProjectManagementServiceClient
     {
         private readonly Jira _jiraRestClient;
-        private readonly Lazy<List<IssueType>> _lazyIssueTypes;
+        private readonly Lazy<IEnumerable<IssueType>> _lazyIssueTypes;
 
-        public List<IssueType> IssueTypes => _lazyIssueTypes.Value;
+        public IEnumerable<IssueType> IssueTypes => _lazyIssueTypes.Value;
 
         public JiraClient(Jira jiraRestClient)
         {
             _jiraRestClient = jiraRestClient;
-            _lazyIssueTypes = new Lazy<List<IssueType>>(() =>
-                _jiraRestClient.GetIssueTypes().ToList());
+            _lazyIssueTypes = new Lazy<IEnumerable<IssueType>>(() =>
+                _jiraRestClient.GetIssueTypes());
         }
 
         public IssueCard GetIssue(string key)
